@@ -1,0 +1,97 @@
+<?php
+/**
+ * @file
+ * Functional tests for the dna module.
+ */
+class DnaTests extends DrupalWebTestCase {
+
+    public static function getInfo() {
+        return array(
+            'name' => 'dna functional tests',
+            'description' => 'Tests for the functionality of the DNA Module.',
+            'group' => 'DNA Tests',
+        );
+    }
+
+    public function setUp() {
+        parent::setUp(array('dna'));
+    }
+
+    public function testDnaDisplaySuccess() {
+        $this->drupalGet('dna');
+
+        $this->assertText("DNA Completer", 'Form displayed!');
+
+        $form = array();
+        $form['dna'] = "atcg";
+        $this->drupalPost('dna', $form, t('Pair my helix!'));
+
+        $this->assertText("DNA Completer", 'Output displayed!');
+    }
+
+    public function testDnaDisplayFailure() {
+        $this->drupalGet('dna');
+
+        $this->assertText("DNA Completer", 'Form displayed!');
+
+        $form = array();
+        $form['dna'] = "n9m";
+        $this->drupalPost('dna', $form, t('Pair my helix!'));
+
+        $this->assertText("DNA Completer", 'Error displayed!');
+    }
+
+}
+
+
+//Unit testing
+class DnaTestCase extends DrupalUnitTestCase
+{
+    public static function getInfo()
+    {
+        return array(
+            'name' => 'DNA Completer',
+            'description' => 'Application that completes the second helix',
+            'group' => 'DNA Tests',
+        );
+    }
+
+    function testDNA()
+    {
+        $description = 'a single input of a should return t';
+        $input = array('A');
+        $result = put_my_thing_down_flip_it_and_reverse_it($input);
+        $expected_output = array('T');
+        $this->assertEqual($result, $expected_output, $description);
+
+        $description = 't single input of a should return a';
+        $input = array('T');
+        $result = put_my_thing_down_flip_it_and_reverse_it($input);
+        $expected_output = array('A');
+        $this->assertEqual($result, $expected_output, $description);
+
+        $description = 'c single input of a should return g';
+        $input = array('C');
+        $result = put_my_thing_down_flip_it_and_reverse_it($input);
+        $expected_output = array('G');
+        $this->assertEqual($result, $expected_output, $description);
+
+        $description = 'g single input of a should return c';
+        $input = array('G');
+        $result = put_my_thing_down_flip_it_and_reverse_it($input);
+        $expected_output = array('C');
+        $this->assertEqual($result, $expected_output, $description);
+
+        $description = 'application should be able handle two-character input from user';
+        $input = array('A', 'T');
+        $result = put_my_thing_down_flip_it_and_reverse_it($input);
+        $expected_output = array('T', 'A');
+        $this->assertEqual($result, $expected_output, $description);
+
+        $description = 'application should be able handle multiple-character input from user';
+        $input = array('A','T','C','G','G','C','T','A','T','C','G','A',);
+        $result = put_my_thing_down_flip_it_and_reverse_it($input);
+        $expected_output = array('T','A','G','C','C','G','A','T','A','G','C','T',);
+        $this->assertEqual($result, $expected_output, $description);
+    }
+}
