@@ -55,25 +55,25 @@ class DnaTestCase extends DrupalUnitTestCase
 
     function testDNA()
     {
-        $description = 'a single input of a should return t';
+        $description = 'a single input of A should return T';
         $input = array('A');
         $result = helixify($input);
         $expected_output = array('T');
         $this->assertEqual($result, $expected_output, $description);
 
-        $description = 't single input of a should return a';
+        $description = 'a single input of T should return A';
         $input = array('T');
         $result = helixify($input);
         $expected_output = array('A');
         $this->assertEqual($result, $expected_output, $description);
 
-        $description = 'c single input of a should return g';
+        $description = 'a single input of C should return G';
         $input = array('C');
         $result = helixify($input);
         $expected_output = array('G');
         $this->assertEqual($result, $expected_output, $description);
 
-        $description = 'g single input of a should return c';
+        $description = 'a single input of G should return C';
         $input = array('G');
         $result = helixify($input);
         $expected_output = array('C');
