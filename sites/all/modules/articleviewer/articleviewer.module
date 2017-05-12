@@ -1,25 +1,28 @@
 <?php
-  function article_viewer_menu() {
-    $items['getarticles/%/%'] = array(
-      'access arguments' => array('access content'),
-      'page callback' => 'viewer_callback',
-      'page arguments' => array(1,2),
-      'type' => MENU_CALLBACK
+function articleviewer_menu() {
+    $items['path-to-ajax/%/%'] = array(
+            'access arguments' => array('access content'),
+            'page callback' => 'articleviewer_callback',
+            'page arguments' => array(1,2),
+            'type' => MENU_CALLBACK,
     );
     return $items;
+}
+
+function articleviewer_callback($js, $nid) {
+
+  $node = node_load($nid);
+
+  if ($js == 'nojs') {
+    drupal_goto('node/' . $node->nid);
   }
 
-  function viewer_callback($js, $nid) {
-    $node = node_load($nid);
-    //if there is no js, then simply go to node and 'degrade gracefully'
-    if($js == 'nojs') {
-      drupal_goto('node/'. $node->nid);
-    }
+  $build = node_view($node);
+  $html = render($build);
 
-    $build = node_view($node);
-    $html = render($build);
-    $commands[] = ajax_command_html('#articleviewer-ajax-wrapper', $html);
+  $commands = array();
+  $commands[] = ajax_command_html('#articleviewer-ajax-wrapper', $html);
 
-    print ajax_render($commands);
-    exit;
-  }
+  print ajax_render($commands);
+  exit;
+}
