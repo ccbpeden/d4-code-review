@@ -1,7 +1,7 @@
 <?php
 function dna_menu() {
   $items['dna'] = array(
-    'title' => 'DNA Completer',
+    'title' => 'Helix Tindr',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('dna_form'),
     'access callback' => TRUE,

@@ -20,25 +20,25 @@ class DnaTests extends DrupalWebTestCase {
     public function testDnaDisplaySuccess() {
         $this->drupalGet('dna');
 
-        $this->assertText("DNA Completer", 'Form displayed!');
+        $this->assertText("Helix Tindr", 'Form displayed!');
 
         $form = array();
         $form['dna'] = "atcg";
         $this->drupalPost('dna', $form, t('Pair my helix!'));
 
-        $this->assertText("DNA Completer", 'Output displayed!');
+        $this->assertText("Helix Tindr", 'Output displayed!');
     }
 
     public function testDnaDisplayFailure() {
         $this->drupalGet('dna');
 
-        $this->assertText("DNA Completer", 'Form displayed!');
+        $this->assertText("Helix Tindr", 'Form displayed!');
 
         $form = array();
         $form['dna'] = "n9m";
         $this->drupalPost('dna', $form, t('Pair my helix!'));
 
-        $this->assertText("DNA Completer", 'Error displayed!');
+        $this->assertText("Helix Tindr", 'Error displayed!');
     }
 
 }
@@ -50,7 +50,7 @@ class DnaTestCase extends DrupalUnitTestCase
     public static function getInfo()
     {
         return array(
-            'name' => 'DNA Completer',
+            'name' => 'Helix Tindr',
             'description' => 'Application that completes the second helix',
             'group' => 'DNA Tests',
         );
