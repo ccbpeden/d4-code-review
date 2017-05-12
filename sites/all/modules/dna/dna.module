@@ -1,0 +1,72 @@
+<?php
+function dna_menu() {
+  $items['dna'] = array(
+    'title' => 'DNA Completer',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dna_form'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['helix_pair_result_page'] = array(
+    'title' => "Now with 100% more helix!",
+    'page callback' => 'helix_pair_result',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function dna_form() {
+  $form['dna'] = array(
+    '#title' => 'Helix Seeks Mate',
+    '#type' => 'textfield',
+    '#description' => t('Enter your dna strand sequence. Acceptable inputs are A, C, T, & G, spaces, and commas. '),
+    '#required' => TRUE,
+    '#element_validate' => array('element_validate_nucleotides'),
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Pair my helix!',
+  );
+  return $form;
+}
+
+function element_validate_nucleotides($element) {
+  $element_array = str_split(strtoupper($element['#value']));
+  foreach($element_array as $element){
+    if($element != 'A' && $element != 'C' && $element != 'G' && $element != 'T' && $element != ' ' && $element != ','){
+      form_set_error('dna', 'Sorry, one or more inputs are invalid, please check and try again!');
+    }
+  }
+}
+
+function dna_form_submit($form, &$form_state) {
+  $stripped_input = preg_replace('/[ ,]+/', '', strtoupper($form_state['values']['dna']));
+  $input_array = str_split($stripped_input);
+  $output_array = helixify($input_array);
+
+  $_SESSION['helix_pair_result'] = implode(" ", $output_array);
+  $_SESSION['inputted_helix'] = implode(" ", $input_array);
+
+  $form_state['redirect'] = 'helix_pair_result_page';
+}
+
+function helixify($input_array) {
+  $output_array = array();
+  foreach ($input_array as $nucleotide) {
+    if($nucleotide == "A") {
+      array_push($output_array, "T");
+    } elseif ($nucleotide == "T") {
+      array_push($output_array, "A");
+    } elseif ($nucleotide == "C") {
+      array_push($output_array, "G");
+    } elseif ($nucleotide == "G") {
+      array_push($output_array, "C");
+    }
+  }
+  return $output_array;
+}
+
+function helix_pair_result() {
+  return '<p>Your inputted nucleotide strand was ' . $_SESSION['inputted_helix'] . '</p> <p>The strand to complete a double helix is ' . $_SESSION['helix_pair_result'] . '</p>';
+}
