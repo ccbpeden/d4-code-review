@@ -1,0 +1,5 @@
+name = Article Viewer
+description = Use ajax to view articles without page redirects
+package = DNA Modules
+core = 7.x
+files[] = articleviewer.module
